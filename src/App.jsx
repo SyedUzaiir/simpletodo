@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-
+import Navbar from './components/Navbar'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="container">
-        <div className="bg-red-600">
+      <Navbar/>
+      <div className="container mx-auto my-5 rounded-xl p-5 bg-violet-100">
+        <div className="">
           Hey i am reds
         </div>
       </div>
