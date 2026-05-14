@@ -10,6 +10,9 @@ function App() {
 
   ])
 
+  const saveToLs = (params) =>{
+    localStorage.setItem("todos",JSON.stringify(todos))
+  }
 
   const handleEdit=(e,id) =>{
     let t =  todos.filter(i=> i.id==id)
@@ -18,6 +21,7 @@ function App() {
       return item.id!==id
     });
     setTodos(newTodos)
+    saveToLs()
   }
 
   const handleDelete=(e,id)=>{
@@ -31,6 +35,7 @@ function App() {
     });
     // newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos)
+    saveToLs()
 
   }
 
@@ -38,6 +43,7 @@ function App() {
     setTodos([...todos, {id: uuidv4(), todo, isCompleted:false}])
     setTodo("")
     console.log(todo)
+    saveToLs()
   }
 
   const handleChange=(e)=>{
@@ -53,6 +59,7 @@ function App() {
     let newTodos = [...todos];
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos)
+    saveToLs()
   }
 
   return (
