@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,13 +10,20 @@ function App() {
 
   ])
 
+  useEffect(()=>{
+    const storedTodos = JSON.parse(localStorage.getItem("todos"))
+    if (Array.isArray(storedTodos)) {
+      setTodos(storedTodos)
+    }
+  },[])
+
   const saveToLs = (params) =>{
     localStorage.setItem("todos",JSON.stringify(todos))
   }
 
   const handleEdit=(e,id) =>{
     let t =  todos.filter(i=> i.id==id)
-    setTodo(t[0].todo)
+    setTodo(t[0]?.todo ?? "")
     let newTodos = todos.filter(item=>{
       return item.id!==id
     });
