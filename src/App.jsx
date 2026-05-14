@@ -6,20 +6,27 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
 
   const [todo, setTodo] = useState("")//input text
-  const [todos, setTodos] = useState([
-
-  ])
+  const [todos, setTodos] = useState([])
+  const [showFinished,setshowFinished] = useState(true)
 
   useEffect(()=>{
-    const storedTodos = JSON.parse(localStorage.getItem("todos"))
-    if (Array.isArray(storedTodos)) {
-      setTodos(storedTodos)
+    let todoString = localStorage.getItem("todos")
+    if(todoString){
+      let todos = JSON.parse(localStorage.getItem("todos"))
+      // Filter out any empty todos
+      todos = todos.filter(item => item.todo && item.todo.trim() !== "")
+      setTodos(todos)
     }
   },[])
 
   const saveToLs = (params) =>{
     localStorage.setItem("todos",JSON.stringify(todos))
   }
+
+  const toggleFinished = (params) => {
+    
+  }
+  
 
   const handleEdit=(e,id) =>{
     let t =  todos.filter(i=> i.id==id)
@@ -47,6 +54,8 @@ function App() {
   }
 
   const handleAdd=()=>{
+    // Prevent adding empty todos
+    if(todo.trim() === "") return
     setTodos([...todos, {id: uuidv4(), todo, isCompleted:false}])
     setTodo("")
     console.log(todo)
@@ -76,8 +85,9 @@ function App() {
         <div className="addTodo my-5">
           <h2 className='text-lg font-bold'>Add a Todo</h2>
           <input onChange={handleChange} value={todo} type="text" className="w-80" />
-          <button onClick={handleAdd} className='bg-violet-800 hover:bg-violet-950 p-3 py-1 text-sm font-bold text-white rounded-md mx-6 '>Save</button>
+          <button onClick={handleAdd} disabled={todo.length<3} className='bg-violet-800 hover:bg-violet-950 p-3 py-1 text-sm font-bold text-white rounded-md mx-6 '>Save</button>
         </div>
+        <input type="checkbox" checked={showFinished} /> Show Finished
         <h2 className="text-lg font-bold">Your Todos</h2>
 
         <div className="todos">
@@ -85,10 +95,10 @@ function App() {
           {todos.map(item=>{
             return <div key={item.id} className="todo flex w-1/3 my-3 justify-between">
               <div className='flex gap-5'>
-                <input name={item.id} onChange={handleCheckbox} type="checkbox" value={item.isCompleted} id="" />
+                <input name={item.id} onChange={handleCheckbox} type="checkbox" checked={item.isCompleted} id="" />
                 <div className={item.isCompleted?"line-through":""}>{item.todo}</div> 
               </div>
-              <div className="buttons">
+              <div className="buttons flex h-full">
                 <button onClick={(e)=>handleEdit(e,item.id)} className='bg-violet-800 hover:bg-violet-950 p-3 py-1 text-sm font-bold text-white rounded-md mx-1 '>Edit</button>
                 <button onClick={(e)=>{handleDelete(e,item.id)}} className='bg-violet-800 hover:bg-violet-950 p-3 py-1 text-sm font-bold text-white rounded-md mx-1 '>Delete</button>
               </div>
